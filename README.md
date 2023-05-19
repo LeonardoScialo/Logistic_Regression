@@ -1,2 +1,2 @@
 # Logistic_Regression
-Example of logistic regression from scratch
+Logistic regression from scratch
