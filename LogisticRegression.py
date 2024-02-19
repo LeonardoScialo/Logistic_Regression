@@ -103,7 +103,10 @@ if __name__ == "__main__":
     y_data = df.iloc[:, -1:].values
 
     # normalising data
+    normalise_y = False
     X_data = normalisation(X_data)
+    if normalise_y:
+        y_data = normalisation(y_data)
 
     # splitting data for train and testing
     X_train, X_test, y_train, y_test = train_test_split(X_data, y_data, test_size=0.20, random_state=0)
@@ -113,6 +116,19 @@ if __name__ == "__main__":
 
     # get prediction using test data
     prediction = predict(w, b, X_test)
+
+    # plotting cost over iterations
+    x_vals = np.arange(X_train.min(), X_train.max(), .01)
+    x_vals = x_vals.reshape(len(x_vals), 1)
+    p_vals = 1 / (1 + np.exp(-(b + (np.dot(x_vals, w)))))
+
+    x_vals_costs = [i * 10 for i in list(range(1, len(cost_list) + 1))]
+    plt.figure(1, figsize=(8, 6))
+    plt.plot(x_vals_costs, cost_list)
+    # plt.grid(False)
+    plt.title("Costs over iterations")
+    plt.xlabel("Number of iterations")
+    plt.ylabel("Cost")
 
     # if process_confusion is true, get the confusion matrix
     if process_confusion:
@@ -127,17 +143,5 @@ if __name__ == "__main__":
         plt.title("Confusion Matrix")
         plt.xlabel("Predicted")
         plt.ylabel("Actual")
-
-    # plotting cost over iterations
-    x_vals = np.arange(X_train.min(), X_train.max(), .01)
-    x_vals = x_vals.reshape(len(x_vals), 1)
-    p_vals = 1 / (1 + np.exp(-(b + (np.dot(x_vals, w)))))
-
-    x_vals_costs = [i * 10 for i in list(range(1, len(cost_list) + 1))]
-    plt.figure(1, figsize=(8, 6))
-    plt.plot(x_vals_costs, cost_list)
-    plt.title("Costs over iterations")
-    plt.xlabel("Number of iterations")
-    plt.ylabel("Cost")
 
     plt.show()
